@@ -1,5 +1,5 @@
 def get_coordinates(coord_01, coord_02):
-    """Bresenham algorithm to select points."""
+    """Bresenham algorithm to get the coordinates between points."""
     x1, y1 = coord_01[0], coord_01[1]
     x2, y2 = coord_02[0], coord_02[1]
 
