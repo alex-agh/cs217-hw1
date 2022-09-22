@@ -8,7 +8,7 @@ clock = pygame.time.Clock()
 
 class App:
     def __init__(self):
-        self.background_colour = (0, 0, 0)
+        self.background_colour = (16, 24, 32)
         (width, height) = (800, 600)
         self.screen = pygame.display.set_mode((width, height))
         pygame.display.set_caption('Draw Polygon')
@@ -17,7 +17,7 @@ class App:
 
     def draw_line(self, coordinates):
         """Change the color of points on screen."""
-        color = (255, 255, 255)
+        color = (254, 231, 21)
         for coordinate in coordinates:
             self.screen.set_at(coordinate, color)
 
@@ -26,15 +26,10 @@ class App:
             coordinates = get_coordinates(edge[0], edge[1])
             self.draw_line(coordinates)
 
-    def transform(self, polygon, increment, t):
-        if t == 's' or t == 'd':
-            polygon.scale(increment)
-        if t == 't':
-            polygon.counter_clockwise(increment)
-        if t == 'r':
-            polygon.clockwise(increment)
+    def update(self, obj):
         self.screen.fill(self.background_colour)
-        self.draw_polygon(polygon)
+        self.draw_polygon(obj)
+        pygame.display.update()
 
     def main_loop(self):
         """ Run the app """
@@ -53,13 +48,29 @@ class App:
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_s:
-                        self.transform(polygon, 0.05, 's')
+                        polygon.scale(0.05)
+                        self.update(polygon)
                     if event.key == pygame.K_d:
-                        self.transform(polygon, -0.05, 'd')
+                        polygon.scale(-0.05)
+                        self.update(polygon)
                     if event.key == pygame.K_t:
-                        self.transform(polygon, pi/10, 't')
+                        polygon.counter_clockwise(pi/10)
+                        self.update(polygon)
                     if event.key == pygame.K_r:
-                        self.transform(polygon, pi/10, 'r')
+                        polygon.clockwise(pi/10)
+                        self.update(polygon)
+                    if event.key == pygame.K_RIGHT:
+                        polygon.move(15)
+                        self.update(polygon)
+                    if event.key == pygame.K_LEFT:
+                        polygon.move(-15)
+                        self.update(polygon)
+                    if event.key == pygame.K_DOWN:
+                        polygon.move(15, 1)
+                        self.update(polygon)
+                    if event.key == pygame.K_UP:
+                        polygon.move(-15, 1)
+                        self.update(polygon)
                 if event.type == pygame.QUIT:
                     running = False
                 pygame.display.flip()

@@ -1,4 +1,4 @@
-from math import cos, sin, ceil, pi
+from math import cos, sin, pi
 import numpy as np
 
 
@@ -20,7 +20,7 @@ class Polygon:
             x = self.x_c + self.r * cos(omega)
             y = self.y_c + self.r * sin(omega)
             omega += 2*pi / self.n
-            coordinates.append([ceil(x), ceil(y), 1])
+            coordinates.append([round(x), round(y), 1])
         return coordinates
 
     def get_polygon_edges(self):
@@ -34,11 +34,12 @@ class Polygon:
         return edges
 
     def set_center(self):
+        """Update the center for the polygon."""
         self.x_c = int(sum([vertex[0] for vertex in self.vertices]) / len(self.vertices))
         self.y_c = int(sum([vertex[1] for vertex in self.vertices]) / len(self.vertices))
 
     def transform(self, matrix):
-        self.set_center()
+        """Apply the transformation matrix."""
         translate = [
             [1, 0, self.x_c],
             [0, 1, self.y_c],
@@ -54,7 +55,7 @@ class Polygon:
         final = np.linalg.multi_dot([translate, matrix, reverse])
         self.vertices = [
             [
-                int(ceil(x)) for x in np.dot(final, vertex).tolist()
+                int(round(x)) for x in np.dot(final, vertex).tolist()
             ] for vertex in self.vertices
         ]
         self.edges = self.get_polygon_edges()
@@ -84,3 +85,13 @@ class Polygon:
         ]
 
         self.transform(rotate)
+
+    def move(self, increment, index=0):
+        for vertex in self.vertices:
+            vertex[index] += increment
+
+        if index == 0:
+            self.x_c += increment
+        if index == 1:
+            self.y_c += increment
+        self.edges = self.get_polygon_edges()

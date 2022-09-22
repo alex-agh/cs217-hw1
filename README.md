@@ -6,4 +6,3 @@ pip install -r requirements.txt
 ```angular2html
 python main.py
 ```
-
